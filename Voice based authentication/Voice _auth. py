@@ -1,0 +1,37 @@
+import speech_recognition as sr
+import pyttsx3
+
+# Initialize text-to-speech
+engine = pyttsx3.init()
+
+def speak(text):
+    engine.say(text)
+    engine.runAndWait()
+
+def get_audio():
+    recognizer = sr.Recognizer()
+    with sr.Microphone() as source:
+        speak("Please say your authentication phrase.")
+        recognizer.adjust_for_ambient_noise(source)
+        audio = recognizer.listen(source)
+    try:
+        text = recognizer.recognize_google(audio)
+        print("You said:", text)
+        return text
+    except sr.UnknownValueError:
+        print("Could not understand the audio")
+    except sr.RequestError:
+        print("Error with the request")
+
+def authenticate():
+    stored_phrase = "my secret phrase"  # This should be pre-stored for each user
+    user_input = get_audio()
+    if user_input and user_input.lower() == stored_phrase.lower():
+        speak("Authentication successful!")
+        print("✅ Access Granted")
+    else:
+        speak("Authentication failed!")
+        print("❌ Access Denied")
+
+if __name__ == "__main__":
+  authenticate()
