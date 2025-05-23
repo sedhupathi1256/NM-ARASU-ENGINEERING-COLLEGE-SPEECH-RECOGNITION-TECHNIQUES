@@ -1,0 +1,32 @@
+import speech_recognition as sr
+import csv
+
+def get_audio():
+    recognizer = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Speak the data you want to enter:")
+        recognizer.adjust_for_ambient_noise(source)
+        audio = recognizer.listen(source)
+    try:
+        data = recognizer.recognize_google(audio)
+        print("You said:", data)
+        return data
+    except sr.UnknownValueError:
+        print("Could not understand the audio")
+    except sr.RequestError:
+        print("Error with the request")
+
+def save_to_csv(data):
+    with open("data.csv", mode="a", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+        writer.writerow([data])
+    print("Data saved successfully!")
+
+if __name__ == "__main__":
+    while True:
+        data = get_audio()
+        if data:
+            save_to_csv(data)
+        choice = input("Do you want to enter more data? (yes/no): ").lower()
+        if choice != "yes":
+            break
