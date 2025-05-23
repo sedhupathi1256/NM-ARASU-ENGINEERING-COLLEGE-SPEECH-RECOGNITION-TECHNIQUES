@@ -1,0 +1,7 @@
+# Speech-Based Data Entry System
+
+## Description
+This Python program allows users to enter data using voice commands and stores it in a CSV file.
+
+## Setup
+1. Clone the repository:
